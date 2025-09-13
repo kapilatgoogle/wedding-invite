@@ -1,1 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nainka</title>
+    
+    <!-- (We removed the Tailwind CDN script) -->
+    
+    <!-- Importing Google Fonts and Custom CSS -->
+    <style>
+        /* Importing Great Vibes for headings and Libre Caslon Text (as Caslon) for body text */
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&display=swap');
+        
+        /* Basic CSS Reset */
+        body, html {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #ffffff;
+            color: #2d3748; /* (Equivalent to text-gray-800) */
+        }
+
+        body {
+            /* Applying Caslon as the base text font */
+            font-family: 'Libre Caslon Text', serif;
+            font-weight: 400;
+            line-height: 1.6; 
+        }
+
+        /* Applying Great Vibes to heading elements */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Great Vibes', cursive;
+            font-weight: 400; 
+            margin-bottom: 0.5rem; /* EDITED: Reduced from 1rem */
+            color: #1a202c; /* (Equivalent to text-gray-900) */
+        }
+
+        /* --- PRELOADER STYLES REMOVED --- */
+
+
+        /* Layout Styling using CSS Grid. 
+           This is the "Mobile First" approach. By default, we use a single column grid.
+        */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr; /* Single column by default (Mobile view) */
+            min-height: 100vh; /* Fill the screen */
+        }
+
+        .image-container {
+            /* This is the mobile height for the image (Equivalent to h-96, which is 24rem or 384px) */
+            height: 384px; 
+            width: 100%;
+            /* Added padding and a background color to frame the contained image */
+            padding: 2rem; 
+            
+            /* Ensure padding is included in the height/width calculation */
+            box-sizing: border-box; 
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            /* Changed from 'cover' to 'contain' to prevent cropping/zooming */
+            object-fit: contain; 
+        }
+
+        .content-container {
+            /* We use flex here to center the content vertically inside the grid cell */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 1rem; /* (Equivalent to p-8) */
+            box-sizing: border-box; /* Add box-sizing for consistency */
+        }
+
+        /* --- STYLES OPTIMIZED FOR MOBILE (Text Sizes Reduced) --- */
+
+        .content-container h1 {
+             font-size: 2.25rem; /* Reduced from 2.5rem */
+             line-height: 1.0; /* EDITED: Reduced from 1.1 */
+        }
+        
+        .content-container h2 {
+            font-size: 1.25rem; /* Reduced from 1.5rem */
+            line-height: 1.1; /* EDITED: Reduced from 1.2 */
+            color: #4a5568; 
+            margin-bottom: 1.5rem; /* EDITED: Reduced from 2rem */
+        }
+
+        #countdown-text {
+            font-size: 1.125rem; /* Unchanged (already standard text size) */
+            font-weight: 700; 
+            color: #1a202c;
+            font-family: 'Libre Caslon Text', serif;
+        }
+        
+        .content-container p {
+            font-size: 1.125rem; /* (text-lg) */
+        }
+        .content-container p.spacing-top {
+             margin-top: 1rem; /* (mt-4) */
+        }
+
+        /* --- Event Details Section --- */
+        .event-details {
+            padding: 3rem 1rem; /* Mobile padding */
+            background-color: #f7fafc; /* Light gray background */
+            text-align: center;
+        }
+
+        .event-details h2 {
+            font-size: 3rem; /* Cursive font */
+            color: #1a202c;
+            margin-bottom: 2rem;
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: 1fr; /* Single column on mobile */
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto; /* Center the grid */
+        }
+
+        .event-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            /* All text in the card should use the body font */
+            font-family: 'Libre Caslon Text', serif;
+            text-align: left; /* Align text left inside the card */
+        }
+
+        .event-card h3 {
+            /* Event card titles should be cursive */
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.25rem;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            text-align: center; /* Center the card title */
+        }
+
+        .event-card p {
+            font-size: 1rem;
+            color: #4a5568;
+            line-height: 1.5;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-card p strong {
+            color: #2d3748;
+        }
+
+        /* --- Functions Section Styles (Mobile First: 2x2 grid) --- */
+        .functions {
+            padding: 3rem 1rem; /* Mobile padding */
+            background-color: #ffffff; /* White background */
+            text-align: center;
+        }
+
+        .functions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 2x2 grid as requested for mobile */
+            gap: 1.5rem;
+            max-width: 1200px; 
+            margin: 0 auto; /* Center the grid */
+        }
+
+        .function-card {
+             /* Shared styles for all cards */
+             background-color: #ffffff; /* Default background, will be overridden */
+             border: 1px solid #e2e8f0;
+             border-radius: 8px;
+             padding: 2rem;
+             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+             min-height: 150px; /* Gives the empty cards height */
+             text-align: left;
+             box-sizing: border-box;
+        }
+
+        /* --- Specific card colors as requested --- */
+        .mehendi-function-card {
+            background-color: #e6fffa; /* Light Green/Mint */
+        }
+        .ring-function-card {
+            background-color: #e3f8ff; /* Light Blue */
+        }
+        .haldi-function-card {
+            background-color: #feffe4; /* Light Yellow */
+        }
+        .wedding-function-card {
+            background-color: #fff5f7; /* Light Pink */
+        }
+
+
+        /* Desktop Breakpoint (Media Query) (Text Sizes Significantly Reduced) */
+        @media (min-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr 1fr; 
+            }
+
+            .image-container {
+                height: 100vh; 
+                padding: 4rem; 
+            }
+
+            .content-container {
+                padding: 4rem; 
+                height: 100vh; 
+            }
+
+            /* Adjusting font sizes for desktop (Significantly Reduced) */
+            .content-container h1 {
+                 font-size: 3.5rem; /* Reduced from 4.5rem */
+            }
+
+            .content-container h2 {
+                font-size: 2rem; /* Reduced from 3rem */
+             }
+             
+             #countdown-text {
+                 font-size: 1.25rem; /* Reduced from 1.875rem */
+             }
+
+             .content-container p {
+                font-size: 1.25rem; /* (md:text-xl) */
+            }
+
+            /* --- Event Details Desktop Styles --- */
+            .event-details {
+                padding: 4rem; /* Desktop padding */
+            }
+
+            .events-grid {
+                grid-template-columns: repeat(3, 1fr); /* 3 columns on desktop */
+            }
+            
+            .event-details h2 {
+                font-size: 4rem;
+            }
+
+            /* --- EDITED: Functions Desktop Styles (1x4 horizontal row) --- */
+            .functions {
+                padding: 4rem; /* Desktop padding */
+            }
+
+            .functions-grid {
+                /* Desktop switches to FOUR columns (1x4 horizontal row) */
+                grid-template-columns: repeat(4, 1fr); 
+                max-width: 1200px; /* Reset max-width to match events grid */
+            }
+        }
+
+        /* Large Desktop Breakpoint (Text Sizes Significantly Reduced) */
+         @media (min-width: 1024px) {
+             .image-container {
+                padding: 5rem; 
+             }
+             .content-container {
+                padding: 5rem; 
+             }
+
+             .content-container h1 {
+                 font-size: 4.5rem; /* Reduced from 6rem */
+             }
+
+             /* Added definitions here to manage scale */
+             .content-container h2 {
+                 font-size: 2.5rem; /* (Was inheriting 2rem) */
+             }
+             
+             #countdown-text {
+                 font-size: 1.5rem; /* (Was inheriting 1.25rem) */
+             }
+         }
+
+    </style>
+</head>
+<body>
+    
+    <!-- PRELOADER HTML REMOVED -->
+
+    <main>
+        <!-- Welcome Section -->
+        <section class="main-layout">
+            
+            <!-- Left Div (Image) -->
+            <div class="image-container">
+                <img src="https://kapilatgoogle.github.io/wedding-invite/couple.jpg" 
+                     alt="A smiling couple outdoors">
+            </div>
+
+            <!-- Right Div (Content) - UPDATED HTML -->
+            <div class="content-container">
+                <h1>Welcome to the Wedding of Kapil & Naina</h1>
+                <h2>Join us in celebrating love, laughter & happily ever after</h2>
+                
+                <!-- This paragraph will be populated by our JavaScript -->
+                <p id="countdown-text">Calculating...</p>
+            </div>
+
+        </section>
+
+        <!-- Event Details Section -->
+        <section class="event-details">
+            
+
+        
+        </section>
+
+        <!-- Functions Section -->
+        <section class="functions">
+            
+            <!-- EDITED: Functions Grid with specific classes added -->
+            <div class="functions-grid">
+                <div class="function-card mehendi-function-card"></div>
+                <div class="function-card ring-function-card"></div>
+                <div class="function-card haldi-function-card"></div>
+                <div class="function-card wedding-function-card"></div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- JAVASCRIPT for the countdown -->
+    <script>
+        // --- JAVASCRIPT LOGIC REVERTED ---
+        
+        // Reverted to DOMContentLoaded listener. Removed window.onload and preloader logic.
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Countdown Logic ---
+            const countdownElement = document.getElementById('countdown-text');
+
+            const weddingDate = new Date(2025, 11, 14); 
+            const today = new Date();
+            const todayDateOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+            const msPerDay = 1000 * 60 * 60 * 24;
+            const timeDiff = weddingDate.getTime() - todayDateOnly.getTime();
+            const dayDiff = Math.round(timeDiff / msPerDay);
+            
+            let message = ''; 
+
+            if (dayDiff > 0) {
+                const plural = dayDiff > 1 ? 's' : ''; 
+                message = `${dayDiff} Day${plural} to go!`;
+            } 
+            else if (dayDiff === 0) {
+                message = 'The wedding is today!';
+            } 
+            else {
+                const daysMarried = Math.abs(dayDiff); 
+                const plural = daysMarried > 1 ? 's' : ''; 
+                message = `Happily married for ${daysMarried} Day${plural}!`;
+            }
+
+            countdownElement.textContent = message;
+        });
+    </script>
+
+</body>
+</html>
 
