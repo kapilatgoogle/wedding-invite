@@ -4,366 +4,792 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nainka</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     
-    <!-- (We removed the Tailwind CDN script) -->
-    
-    <!-- Importing Google Fonts and Custom CSS -->
     <style>
-        /* Importing Great Vibes for headings and Libre Caslon Text (as Caslon) for body text */
-        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&display=swap');
-        
-        /* Basic CSS Reset */
-        body, html {
+        /* === CSS Variables === */
+        :root {
+            --brand-pink: #F94A6F;
+            --font-sans: 'Inter', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+            
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        /* === Global & Base Styles === */
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            background-color: #ffffff;
-            color: #2d3748; /* (Equivalent to text-gray-800) */
+            font-family: var(--font-sans);
+            background-color: var(--gray-50); 
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        body {
-            /* Applying Caslon as the base text font */
-            font-family: 'Libre Caslon Text', serif;
-            font-weight: 400;
-            line-height: 1.6; 
-        }
-
-        /* Applying Great Vibes to heading elements */
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Great Vibes', cursive;
-            font-weight: 400; 
-            margin-bottom: 0.5rem; /* EDITED: Reduced from 1rem */
-            color: #1a202c; /* (Equivalent to text-gray-900) */
-        }
-
-        /* --- PRELOADER STYLES REMOVED --- */
-
-
-        /* Layout Styling using CSS Grid. 
-           This is the "Mobile First" approach. By default, we use a single column grid.
-        */
-        .main-layout {
-            display: grid;
-            grid-template-columns: 1fr; /* Single column by default (Mobile view) */
-            min-height: 100vh; /* Fill the screen */
-        }
-
-        .image-container {
-            /* This is the mobile height for the image (Equivalent to h-96, which is 24rem or 384px) */
-            height: 384px; 
-            width: 100%;
-            /* Added padding and a background color to frame the contained image */
-            padding: 2rem; 
-            
-            /* Ensure padding is included in the height/width calculation */
-            box-sizing: border-box; 
-        }
-
-        .image-container img {
+        /* === App Frame & Desktop Simulation === */
+        
+        #app-frame {
             width: 100%;
             height: 100%;
-            /* Changed from 'cover' to 'contain' to prevent cropping/zooming */
-            object-fit: contain; 
+            transition: all 0.3s ease-in-out;
+            position: relative; 
+            background-color: #ffffff; 
+        }
+        
+        #app-inner-wrapper {
+            width: 100%;
+            height: 100%;
+            overflow-y: auto; 
+            position: relative;
+            background-color: #ffffff;
+            scroll-behavior: smooth;
+            display: flex;
+            flex-direction: column;
+            /* === MODIFIED: Hide scrollbar for Firefox === */
+            scrollbar-width: none;
+        }
+        
+        /* === MODIFIED: Hide scrollbar for WebKit (Chrome, Safari) === */
+        #app-inner-wrapper::-webkit-scrollbar {
+            display: none;
         }
 
-        .content-container {
-            /* We use flex here to center the content vertically inside the grid cell */
+        @media (min-width: 640px) {
+            body {
+                background-color: var(--gray-900);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 2rem;
+                height: 100vh;
+            }
+
+            #app-frame {
+                width: 100%; 
+                max-width: 400px;
+                height: 100%;
+                max-height: 844px;
+                border-radius: 1.75rem; 
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4), 
+                            0 0 0 4px rgba(255, 255, 255, 0.1); 
+                border: 8px solid #000; 
+                overflow: hidden; 
+            }
+
+            #app-inner-wrapper {
+                border-radius: 1.25rem; 
+            }
+        }
+
+        /* === Header === */
+        header {
+            position: sticky; 
+            top: 0;
+            z-index: 10;
+            width: 100%;
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--gray-200);
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        header div {
+            padding: 1rem 1.5rem;
+        }
+        header h1 {
+            font-size: 1.5rem; 
+            line-height: 2rem;
+            font-weight: 700;
+            color: var(--brand-pink);
+            text-align: center;
+            font-family: var(--font-serif);
+        }
+
+        /* === Main Content Area === */
+        main {
+            flex: 1 1 0%; 
+            background-color: #ffffff;
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        section {
+            width: 100%;
+            padding: 1.5rem;
+            scroll-margin-top: 5rem; 
+        }
+        
+        .section-hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .section-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        section h2 {
+            font-size: 1.875rem; 
+            line-height: 2.25rem;
+            font-weight: 700;
+            color: var(--brand-pink);
+            margin-bottom: 1rem;
+            font-family: var(--font-serif);
+        }
+
+        #hero-section,
+        #story-section,
+        #games-section {
+            background-color: var(--gray-50);
+        }
+        #hero-section { min-height: 600px; }
+        #functions-section { min-height: 500px; border-top: 1px solid var(--gray-100); }
+        #story-section { min-height: 500px; border-top: 1px solid var(--gray-100); }
+        #fun-facts-section { border-top: 1px solid var(--gray-100); }
+        #games-section { min-height: 500px; border-top: 1px solid var(--gray-100); }
+
+
+        /* === Functions Section === */
+        .functions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+        }
+        .function-card {
+            background-color: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1 / 1;
+            cursor: pointer;
+            transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .function-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            transform: scale(1.03);
+        }
+        .function-card .material-icons-outlined {
+            color: var(--brand-pink);
+            font-size: 2.25rem; 
+        }
+        .function-card h3 {
+            font-size: 0.875rem; 
+            line-height: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+
+        /* === Fun Facts Section === */
+        #fun-facts-section h3 {
+            font-size: 1.25rem; 
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+            font-family: var(--font-serif);
+            text-align: center;
+        }
+        #slideshow-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+        #slideshow-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .fun-fact-slide {
+            width: 100%;
+            flex-shrink: 0;
+            height: 9rem; 
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 1rem; /* (Equivalent to p-8) */
-            box-sizing: border-box; /* Add box-sizing for consistency */
+            align-items: center;
+            text-align: center;
+            padding-left: 2.5rem; 
+            padding-right: 2.5rem; 
+            box-sizing: border-box; 
         }
-
-        /* --- STYLES OPTIMIZED FOR MOBILE (Text Sizes Reduced) --- */
-
-        .content-container h1 {
-             font-size: 2.25rem; /* Reduced from 2.5rem */
-             line-height: 1.0; /* EDITED: Reduced from 1.1 */
+        .fun-fact-slide p {
+            color: var(--gray-700);
+            font-size: 0.875rem; 
+            line-height: 1.625; 
         }
-        
-        .content-container h2 {
-            font-size: 1.25rem; /* Reduced from 1.5rem */
-            line-height: 1.1; /* EDITED: Reduced from 1.2 */
-            color: #4a5568; 
-            margin-bottom: 1.5rem; /* EDITED: Reduced from 2rem */
+        .name-mehak {
+            font-weight: 700;
+            color: var(--brand-pink);
+            font-family: var(--font-serif);
         }
-
-        #countdown-text {
-            font-size: 1.125rem; /* Unchanged (already standard text size) */
-            font-weight: 700; 
-            color: #1a202c;
-            font-family: 'Libre Caslon Text', serif;
+        .name-gautam {
+            font-weight: 700;
+            color: var(--gray-900);
+            font-family: var(--font-serif);
         }
         
-        .content-container p {
-            font-size: 1.125rem; /* (text-lg) */
+        .fun-fact-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 9999px;
+            padding: 0.25rem;
+            color: var(--gray-700);
+            transition: all 0.2s ease-in-out;
+            z-index: 10;
+            border: none;
+            cursor: pointer;
+            display: flex; 
+            align-items: center;
+            justify-content: center;
         }
-        .content-container p.spacing-top {
-             margin-top: 1rem; /* (mt-4) */
+        .fun-fact-button:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: var(--brand-pink);
+            transform: translateY(-50%) scale(1.1);
+        }
+        #fun-fact-prev { left: 0; }
+        #fun-fact-next { right: 0; }
+
+
+        /* === Footer === */
+        footer {
+            position: sticky; 
+            bottom: 0;
+            z-index: 10;
+            width: 100%;
+            background-color: #ffffff;
+            border-top: 1px solid var(--gray-200);
+            box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        footer nav {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+        }
+        footer nav a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-500);
+            text-decoration: none;
+            transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+        }
+        footer nav a:hover {
+            color: var(--brand-pink);
+            transform: translateY(-2px);
+        }
+        footer nav a.active {
+            color: var(--brand-pink);
+        }
+        footer nav a .material-icons-outlined {
+            font-size: 24px;
+        }
+        footer nav a span:last-child {
+            font-size: 0.75rem; 
+            font-weight: 500;
+            margin-top: 0.25rem;
+        }
+        
+        /* === Modal === */
+        #function-modal {
+            position: absolute;
+            inset: 0;
+            z-index: 40;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            opacity: 1;
+            pointer-events: auto;
+            transition: opacity 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out;
+        }
+        #function-modal.hidden {
+            opacity: 0;
+            pointer-events: none;
         }
 
-        /* --- Event Details Section --- */
-        .event-details {
-            padding: 3rem 1rem; /* Mobile padding */
-            background-color: #f7fafc; /* Light gray background */
+        #modal-content-area {
+            position: relative;
+            width: 100%;
+            max-width: 24rem; 
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+            transform: scale(1);
+            opacity: 1;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease-in-out;
+        }
+
+        #function-modal.hidden #modal-content-area {
+            transform: scale(0.9);
+            opacity: 0;
+        }
+
+
+        #modal-close-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            z-index: 10;
+            color: var(--gray-500);
+            transition: color 0.2s ease-in-out;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+        }
+        #modal-close-btn:hover {
+            color: var(--brand-pink);
+        }
+
+        #modal-details-content {
+            padding: 1.5rem;
+            padding-top: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
         }
-
-        .event-details h2 {
-            font-size: 3rem; /* Cursive font */
-            color: #1a202c;
-            margin-bottom: 2rem;
-        }
-
-        .events-grid {
-            display: grid;
-            grid-template-columns: 1fr; /* Single column on mobile */
-            gap: 1.5rem;
-            max-width: 1200px;
-            margin: 0 auto; /* Center the grid */
-        }
-
-        .event-card {
-            background-color: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 2rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            /* All text in the card should use the body font */
-            font-family: 'Libre Caslon Text', serif;
-            text-align: left; /* Align text left inside the card */
-        }
-
-        .event-card h3 {
-            /* Event card titles should be cursive */
-            font-family: 'Great Vibes', cursive;
-            font-size: 2.25rem;
-            color: #2d3748;
-            margin-bottom: 1rem;
-            text-align: center; /* Center the card title */
-        }
-
-        .event-card p {
-            font-size: 1rem;
-            color: #4a5568;
-            line-height: 1.5;
+        
+        #modal-icon {
+            color: var(--brand-pink);
+            font-size: 3rem; 
             margin-bottom: 0.5rem;
         }
-
-        .event-card p strong {
-            color: #2d3748;
+        #modal-title {
+            font-size: 1.875rem; 
+            font-weight: 700;
+            color: var(--brand-pink);
+            margin-bottom: 0.5rem;
+            font-family: var(--font-serif);
+        }
+        #modal-datetime {
+            font-size: 1.125rem; 
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+        #modal-venue {
+            font-size: 1rem; 
+            color: var(--gray-600);
+            margin-bottom: 1rem;
+        }
+        #modal-description {
+            color: var(--gray-700);
+            font-size: 0.875rem; 
+            font-style: italic;
+            margin-bottom: 1.5rem;
+        }
+        #modal-map-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            background-color: var(--brand-pink);
+            color: #ffffff;
+            font-size: 0.875rem; 
+            font-weight: 500;
+            border-radius: 0.375rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            text-decoration: none;
+            transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+        }
+        #modal-map-link:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+        #modal-map-link .material-icons-outlined {
+            margin-right: 0.5rem;
+            font-size: 1.25rem;
         }
 
-        /* --- Functions Section Styles (Mobile First: 2x2 grid) --- */
-        .functions {
-            padding: 3rem 1rem; /* Mobile padding */
-            background-color: #ffffff; /* White background */
-            text-align: center;
+        #modal-image-placeholder {
+            min-height: 200px;
+            background-color: var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-
-        .functions-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr; /* 2x2 grid as requested for mobile */
-            gap: 1.5rem;
-            max-width: 1200px; 
-            margin: 0 auto; /* Center the grid */
+        #modal-image-placeholder p {
+            color: var(--gray-500);
+            font-size: 0.875rem; 
+            font-style: italic;
         }
-
-        .function-card {
-             /* Shared styles for all cards */
-             background-color: #ffffff; /* Default background, will be overridden */
-             border: 1px solid #e2e8f0;
-             border-radius: 8px;
-             padding: 2rem;
-             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-             min-height: 150px; /* Gives the empty cards height */
-             text-align: left;
-             box-sizing: border-box;
-        }
-
-        /* --- Specific card colors as requested --- */
-        .mehendi-function-card {
-            background-color: #e6fffa; /* Light Green/Mint */
-        }
-        .ring-function-card {
-            background-color: #e3f8ff; /* Light Blue */
-        }
-        .haldi-function-card {
-            background-color: #feffe4; /* Light Yellow */
-        }
-        .wedding-function-card {
-            background-color: #fff5f7; /* Light Pink */
-        }
-
-
-        /* Desktop Breakpoint (Media Query) (Text Sizes Significantly Reduced) */
-        @media (min-width: 768px) {
-            .main-layout {
-                grid-template-columns: 1fr 1fr; 
-            }
-
-            .image-container {
-                height: 100vh; 
-                padding: 4rem; 
-            }
-
-            .content-container {
-                padding: 4rem; 
-                height: 100vh; 
-            }
-
-            /* Adjusting font sizes for desktop (Significantly Reduced) */
-            .content-container h1 {
-                 font-size: 3.5rem; /* Reduced from 4.5rem */
-            }
-
-            .content-container h2 {
-                font-size: 2rem; /* Reduced from 3rem */
-             }
-             
-             #countdown-text {
-                 font-size: 1.25rem; /* Reduced from 1.875rem */
-             }
-
-             .content-container p {
-                font-size: 1.25rem; /* (md:text-xl) */
-            }
-
-            /* --- Event Details Desktop Styles --- */
-            .event-details {
-                padding: 4rem; /* Desktop padding */
-            }
-
-            .events-grid {
-                grid-template-columns: repeat(3, 1fr); /* 3 columns on desktop */
-            }
-            
-            .event-details h2 {
-                font-size: 4rem;
-            }
-
-            /* --- EDITED: Functions Desktop Styles (1x4 horizontal row) --- */
-            .functions {
-                padding: 4rem; /* Desktop padding */
-            }
-
-            .functions-grid {
-                /* Desktop switches to FOUR columns (1x4 horizontal row) */
-                grid-template-columns: repeat(4, 1fr); 
-                max-width: 1200px; /* Reset max-width to match events grid */
-            }
-        }
-
-        /* Large Desktop Breakpoint (Text Sizes Significantly Reduced) */
-         @media (min-width: 1024px) {
-             .image-container {
-                padding: 5rem; 
-             }
-             .content-container {
-                padding: 5rem; 
-             }
-
-             .content-container h1 {
-                 font-size: 4.5rem; /* Reduced from 6rem */
-             }
-
-             /* Added definitions here to manage scale */
-             .content-container h2 {
-                 font-size: 2.5rem; /* (Was inheriting 2rem) */
-             }
-             
-             #countdown-text {
-                 font-size: 1.5rem; /* (Was inheriting 1.25rem) */
-             }
-         }
 
     </style>
 </head>
-<body>
-    
-    <!-- PRELOADER HTML REMOVED -->
+<body class="antialiased">
 
-    <main>
-        <!-- Welcome Section -->
-        <section class="main-layout">
-            
-            <!-- Left Div (Image) -->
-            <div class="image-container">
-                <img src="https://kapilatgoogle.github.io/wedding-invite/couple.jpg" 
-                     alt="A smiling couple outdoors">
-            </div>
+    <div id="app-frame">
 
-            <!-- Right Div (Content) - UPDATED HTML -->
-            <div class="content-container">
-                <h1>Welcome to the Wedding of Kapil & Naina</h1>
-                <h2>Join us in celebrating love, laughter & happily ever after</h2>
+        <div id="app-inner-wrapper">
+
+            <header>
+                <div>
+                    <h1>#LettheGaMeBegin!</h1>
+                </div>
+            </header>
+
+            <main>
                 
-                <!-- This paragraph will be populated by our JavaScript -->
-                <p id="countdown-text">Calculating...</p>
-            </div>
+                <section id="hero-section">
+                     <p style="color: #9ca3af; font-size: 0.875rem;">Hero Section Content Goes Here</p>
+                </section>
 
-        </section>
+                <section id="functions-section">
+                     <h2>Functions</h2>
+                     <div class="functions-grid">
+                        <div class="function-card" data-function="mehandi">
+                            <span class="material-icons-outlined">spa</span>
+                            <h3>Mehandi Lunch</h3>
+                        </div>
+                        <div class="function-card" data-function="ring">
+                            <span class="material-icons-outlined">diamond</span>
+                            <h3>Ring Ceremony</h3>
+                        </div>
+                        <div class="function-card" data-function="haldi">
+                            <span class="material-icons-outlined">filter_vintage</span>
+                            <h3>Haldi Function</h3>
+                        </div>
+                        <div class="function-card" data-function="wedding">
+                            <span class="material-icons-outlined">local_florist</span>
+                            <h3>Wedding Day</h3>
+                        </div>
+                     </div>
+                </section>
 
-        <!-- Event Details Section -->
-        <section class="event-details">
+                <section id="story-section">
+                     <h2>Our Love Story</h2>
+                </section>
+
+                <section id="fun-facts-section">
+                     <h2>Fun Facts</h2>
+                     <h3>Do you know?</h3>
+                     <div id="slideshow-container">
+                        <div id="slideshow-track">
+                            <!-- Slides will be dynamically generated by JS -->
+                        </div>
+                        <button id="fun-fact-prev" class="fun-fact-button">
+                            <span class="material-icons-outlined">chevron_left</span>
+                        </button>
+                        <button id="fun-fact-next" class="fun-fact-button">
+                            <span class="material-icons-outlined">chevron_right</span>
+                        </button>
+                     </div>
+                </section>
+
+                <section id="games-section">
+                     <h2>Games</h2>
+                </section>
+
+            </main>
+
+            <footer>
+                <nav>
+                    <a href="#hero-section" class="active">
+                        <span class="material-icons-outlined">mail_outline</span>
+                        <span>Invite</span>
+                    </a>
+                    <a href="#functions-section">
+                        <span class="material-icons-outlined">celebration</span>
+                        <span>Functions</span>
+                    </a>
+                    <a href="#story-section">
+                        <span class="material-icons-outlined">mood</span>
+                        <span>Story</span>
+                    </a>
+                    <a href="#games-section">
+                        <span class="material-icons-outlined">festival</span>
+                        <span>Games</span>
+                    </a>
+                </nav>
+            </footer>
+
+        </div> <!-- === End of #app-inner-wrapper === -->
+
+
+        <div id="function-modal" class="hidden">
             
+            <div id="modal-content-area">
+                
+                <button id="modal-close-btn">
+                    <span class="material-icons-outlined">close</span>
+                </button>
 
-        
-        </section>
+                <div id="modal-details-content">
+                    <span id="modal-icon" class="material-icons-outlined"></span>
+                    <h2 id="modal-title"></h2>
+                    <p id="modal-datetime"></p>
+                    <p id="modal-venue"></p>
+                    <p id="modal-description"></p>
+                    <a id="modal-map-link" href="#" target="_blank">
+                        <span class="material-icons-outlined">map</span>
+                        View Map
+                    </a>
+                </div>
 
-        <!-- Functions Section -->
-        <section class="functions">
-            
-            <!-- EDITED: Functions Grid with specific classes added -->
-            <div class="functions-grid">
-                <div class="function-card mehendi-function-card"></div>
-                <div class="function-card ring-function-card"></div>
-                <div class="function-card haldi-function-card"></div>
-                <div class="function-card wedding-function-card"></div>
+                <div id="modal-image-placeholder">
+                    <p>(Couple's Image Will Go Here)</p>
+                </div>
+
             </div>
+        </div>
 
-        </section>
+    </div>
 
-    </main>
-
-    <!-- JAVASCRIPT for the countdown -->
+    <!-- === JAVASCRIPT === -->
     <script>
-        // --- JAVASCRIPT LOGIC REVERTED ---
-        
-        // Reverted to DOMContentLoaded listener. Removed window.onload and preloader logic.
         document.addEventListener('DOMContentLoaded', () => {
-
-            // --- Countdown Logic ---
-            const countdownElement = document.getElementById('countdown-text');
-
-            const weddingDate = new Date(2025, 11, 14); 
-            const today = new Date();
-            const todayDateOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-
-            const msPerDay = 1000 * 60 * 60 * 24;
-            const timeDiff = weddingDate.getTime() - todayDateOnly.getTime();
-            const dayDiff = Math.round(timeDiff / msPerDay);
             
-            let message = ''; 
+            // --- Modal Logic (Unchanged) ---
+            const modal = document.getElementById('function-modal');
+            const closeModalBtn = document.getElementById('modal-close-btn');
+            
+            const modalIcon = document.getElementById('modal-icon');
+            const modalTitle = document.getElementById('modal-title');
+            const modalDateTime = document.getElementById('modal-datetime');
+            const modalVenue = document.getElementById('modal-venue');
+            const modalDescription = document.getElementById('modal-description');
+            const modalMapLink = document.getElementById('modal-map-link');
 
-            if (dayDiff > 0) {
-                const plural = dayDiff > 1 ? 's' : ''; 
-                message = `${dayDiff} Day${plural} to go!`;
-            } 
-            else if (dayDiff === 0) {
-                message = 'The wedding is today!';
-            } 
-            else {
-                const daysMarried = Math.abs(dayDiff); 
-                const plural = daysMarried > 1 ? 's' : ''; 
-                message = `Happily married for ${daysMarried} Day${plural}!`;
+            const functionCards = document.querySelectorAll('.function-card');
+
+            const functionDetails = {
+                'mehandi': { 
+                    icon: 'spa',
+                    title: 'Mehandi Lunch', 
+                    dateTime: '11th Nov, Noon',
+                    venue: 'Pearl Hall',
+                    theme: 'Rani Pink & Orange theme',
+                    mapLink: 'https://maps.google.com/?q=Pearl+Hall'
+                },
+                'ring': { 
+                    icon: 'diamond',
+                    title: 'Ring Ceremony', 
+                    dateTime: '11th Nov, 7 PM onwards',
+                    venue: 'Amber Hall',
+                    theme: 'Starry night: Navy blue, gold, silver & disco balls',
+                    mapLink: 'https://maps.google.com/?q=Amber+Hall'
+                },
+                'haldi': { 
+                    icon: 'filter_vintage',
+                    title: 'Haldi Function', 
+                    dateTime: '12th Nov, 11 AM',
+                    venue: 'Pool Side',
+                    theme: 'Sunflower yellow & lavender theme',
+                    mapLink: 'https://maps.google.com/?q=Pool+Side'
+                },
+                'wedding': { 
+                    icon: 'local_florist',
+                    title: 'Wedding Day', 
+                    dateTime: '12th Nov, 7 PM onwards',
+                    venue: 'Palm Court',
+                    theme: 'Ivory, Royal red/maroon, and gold theme',
+                    mapLink: 'https://maps.google.com/?q=Palm+Court' 
+                }
+            };
+
+            function openModal(functionKey) {
+                const details = functionDetails[functionKey];
+                if (details) {
+                    modalIcon.textContent = details.icon;
+                    modalTitle.textContent = details.title;
+                    modalDateTime.textContent = details.dateTime;
+                    modalVenue.textContent = details.venue;
+                    modalDescription.textContent = `"${details.theme}"`;
+                    modalMapLink.href = details.mapLink;
+                    modal.classList.remove('hidden');
+                }
             }
 
-            countdownElement.textContent = message;
+            function closeModal() {
+                modal.classList.add('hidden');
+            }
+
+            functionCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const functionKey = card.dataset.function;
+                    openModal(functionKey);
+                });
+            });
+
+            closeModalBtn.addEventListener('click', closeModal);
+
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // --- Footer Active State Logic ---
+            const navLinks = document.querySelectorAll('footer nav a');
+            const scrollContainer = document.getElementById('app-inner-wrapper');
+            const header = document.querySelector('header');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault(); 
+                    const targetId = link.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+
+                    if (targetElement) {
+                        scrollContainer.scrollTo({
+                            top: targetElement.offsetTop - header.offsetHeight, 
+                            behavior: 'smooth'
+                        });
+                    }
+                    navLinks.forEach(nav => nav.classList.remove('active'));
+                    link.classList.add('active');
+                });
+            });
+            
+            const sections = document.querySelectorAll('main section');
+            
+            scrollContainer.addEventListener('scroll', () => {
+                let current = '';
+                const headerOffset = header.offsetHeight + 20; 
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - headerOffset;
+                    if (scrollContainer.scrollTop >= sectionTop) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+
+            // --- Fun Facts Slideshow Logic (Unchanged) ---
+            const funFacts = [
+                { name: "Mehak", fact: "Mehak is an avid rock climber and scaled her first V5 route just last year." },
+                { name: "Mehak", fact: "Mehak is a secret language enthusiast and can speak three languages fluently: Hindi, English, and French." },
+                { name: "Mehak", fact: "Mehak once won a local baking competition with her famous triple-chocolate lava cake recipe." },
+                { name: "Mehak", fact: "Mehak loves collecting vintage postcards; her oldest one dates back to 1905." },
+                { name: "Mehak", fact: "Mehak has a surprising skill: she can play the theme song from a famous 90s TV show entirely using only whistles." },
+                { name: "Gautam", fact: "Gautam is a massive sci-fi movie buff and can recite almost every line from 'Blade Runner'." },
+                { name: "Gautam", fact: "Gautam taught himself to play the acoustic guitar entirely through YouTube tutorials." },
+                { name: "Gautam", fact: "Gautam volunteered for a non-profit organization, teaching basic coding skills to high school students for a whole summer." },
+                { name: "Gautam", fact: "Gautam is exceptionally skilled at puzzles and can solve a standard Rubik's cube in under a minute." },
+                { name: "Gautam", fact: "Gautam's favorite dish is plain Maggi noodles, which he considers his ultimate comfort food." }
+            ];
+
+            const slideshowTrack = document.getElementById('slideshow-track');
+            const prevButton = document.getElementById('fun-fact-prev');
+            const nextButton = document.getElementById('fun-fact-next');
+
+            if (slideshowTrack && prevButton && nextButton) {
+                const mehakFacts = funFacts.filter(f => f.name === "Mehak");
+                const gautamFactsFixed = funFacts.filter(f => f.name === "Gautam");
+
+                const interleavedFacts = [];
+                const maxLength = Math.max(mehakFacts.length, gautamFactsFixed.length);
+                for (let i = 0; i < maxLength; i++) {
+                    if (mehakFacts[i]) interleavedFacts.push(mehakFacts[i]);
+                    if (gautamFactsFixed[i]) interleavedFacts.push(gautamFactsFixed[i]); 
+                }
+                
+                let totalSlides = interleavedFacts.length;
+                let currentIndex = 0;
+
+                const createSlideHTML = (fact) => {
+                    let factHtml = '';
+                    if (fact.fact.startsWith("Mehak")) {
+                        factHtml = `<span class="name-mehak">Mehak</span>${fact.fact.substring(5)}`;
+                    } else if (fact.fact.startsWith("Gautam")) {
+                        factHtml = `<span class="name-gautam">Gautam</span>${fact.fact.substring(6)}`;
+                    } else {
+                        factHtml = fact.fact;
+                    }
+                    return `<div class="fun-fact-slide"><p>${factHtml}</p></div>`;
+                };
+
+                let slidesHTML = '';
+                interleavedFacts.forEach(fact => {
+                    slidesHTML += createSlideHTML(fact);
+                });
+                slideshowTrack.innerHTML = slidesHTML; 
+
+                function goToSlide(index) {
+                    if (index < 0) index = totalSlides - 1; 
+                    else if (index >= totalSlides) index = 0; 
+                    slideshowTrack.style.transform = `translateX(-${index * 100}%)`;
+                    currentIndex = index;
+                }
+
+                function nextSlide() { goToSlide(currentIndex + 1); }
+                function prevSlide() { goToSlide(currentIndex - 1); }
+
+                nextButton.addEventListener('click', nextSlide);
+                prevButton.addEventListener('click', prevSlide);
+                
+                setInterval(nextSlide, 5000); 
+            }
+            
+            // --- Intersection Observer for Scroll Animations ---
+            const hiddenSections = document.querySelectorAll('.section-hidden');
+            
+            sections.forEach(section => {
+                section.classList.add('section-hidden');
+            });
+
+            const observerOptions = {
+                root: scrollContainer, 
+                rootMargin: '0px',
+                threshold: 0.1 
+            };
+
+            const sectionObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('section-visible');
+                        observer.unobserve(entry.target); 
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                sectionObserver.observe(section);
+            });
+
         });
     </script>
-
 </body>
 </html>
 
