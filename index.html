@@ -155,7 +155,7 @@
             font-family: var(--font-serif);
         }
 
-        #story-section,
+        /* Removed #story-section from this rule */
         #games-section {
             background-color: var(--gray-50);
         }
@@ -217,7 +217,7 @@
             gap: 0.75rem;
             padding: 1.5rem; 
             padding-bottom: 2rem; 
-            /* margin-top: auto; <-- REMOVED this, as user's parent alignment handles it */
+            margin-top: auto; /* Pushes content to the bottom */
         }
 
         #hero-names {
@@ -293,7 +293,18 @@
 
 
         #functions-section { min-height: 500px; border-top: 1px solid var(--gray-100); }
-        #story-section { min-height: 500px; border-top: 1px solid var(--gray-100); }
+        
+        /* === Story Section === */
+        #story-section { 
+            min-height: 700px; 
+            border-top: 1px solid var(--gray-100); 
+            /* --- ADDED GIF BACKGROUND --- */
+            background-image: url('https://kapilatgoogle.github.io/wedding-invite/story.gif');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
         #fun-facts-section { border-top: 1px solid var(--gray-100); }
         #games-section { min-height: 500px; border-top: 1px solid var(--gray-100); }
 
@@ -649,11 +660,10 @@
                 </section>
 
                 <section id="story-section">
-                     <h2>Our Love Story</h2>
+                     
                 </section>
 
                 <section id="fun-facts-section">
-                     <h2>Fun Facts</h2>
                      <h3>Do you know?</h3>
                      <div id="slideshow-container">
                         <div id="slideshow-track">
