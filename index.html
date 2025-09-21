@@ -6,7 +6,7 @@
     <title>🌸 Mehak & Gautam's Wedding Invite 🌸</title>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     
@@ -155,12 +155,143 @@
             font-family: var(--font-serif);
         }
 
-        #hero-section,
         #story-section,
         #games-section {
             background-color: var(--gray-50);
         }
-        #hero-section { min-height: 600px; }
+        
+        /* === Hero Section Styles === */
+        #hero-section {
+            min-height: 600px; /* Taller for hero image */
+            position: relative;
+            padding: 0; /* Remove default padding */
+            overflow: hidden; /* Contain slides */
+            display: flex;
+            align-items: end; /* <-- User's alignment change */
+            justify-content: center;
+        } 
+        
+        #hero-slideshow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff; /* Fallback as requested */
+            z-index: 1;
+        }
+
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: top center; /* Show top 50% of image */
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            z-index: 1;
+        }
+
+        .hero-slide.active {
+            opacity: 1;
+            z-index: 2; /* Active slide on top */
+        }
+        
+        #hero-content {
+            position: relative;
+            z-index: 3; /* Content on top of slideshow */
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        #hero-text-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.5rem; 
+            padding-bottom: 2rem; 
+            /* margin-top: auto; <-- REMOVED this, as user's parent alignment handles it */
+        }
+
+        #hero-names {
+            font-size: 2.5rem; /* 40px, Reduced from 3rem */
+            font-family: var(--font-serif);
+            color: var(--brand-pink);
+            font-weight: 700;
+            line-height: 1.2;
+            margin: 0;
+            white-space: nowrap; 
+        }
+
+        #hero-subtext {
+            font-size: 1rem; /* 16px */
+            color: var(--gray-700);
+            margin: 0;
+            max-width: 250px;
+            line-height: 1.5;
+        }
+
+        #countdown-timer {
+            margin-top: 1.5rem;
+        }
+
+        #timer-blocks {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .timer-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 0.375rem;
+            padding: 0.5rem 0.75rem;
+            min-width: 50px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .timer-block span:first-child {
+            font-size: 1.75rem; /* 28px */
+            font-weight: 700;
+            color: var(--brand-pink);
+            line-height: 1;
+        }
+
+        .timer-label {
+            font-size: 0.625rem; /* 10px */
+            text-transform: uppercase;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        .timer-separator {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--brand-pink);
+            padding: 0.5rem 0;
+        }
+
+        #timer-message {
+            font-size: 1.75rem;
+            font-family: var(--font-serif);
+            color: var(--brand-pink);
+            font-weight: 700;
+            display: none; /* Hidden by default */
+        }
+        /* === End of Hero Section Styles === */
+
+
         #functions-section { min-height: 500px; border-top: 1px solid var(--gray-100); }
         #story-section { min-height: 500px; border-top: 1px solid var(--gray-100); }
         #fun-facts-section { border-top: 1px solid var(--gray-100); }
@@ -348,7 +479,6 @@
             opacity: 1;
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease-in-out;
             
-            /* MODIFIED: Added white fallback color */
             background-color: #ffffff; 
             
             /* background-image is now set by JS */
@@ -464,7 +594,36 @@
             <main>
                 
                 <section id="hero-section">
-                     <p style="color: #9ca3af; font-size: 0.875rem;">Hero Section Content Goes Here</p>
+                    <div id="hero-slideshow">
+                        <!-- Slides injected by JS -->
+                    </div>
+                    
+                    <div id="hero-content">
+                         
+                         <div id="hero-text-wrapper">
+                            <h2 id="hero-names">Mehak & Gautam</h2>
+                            <p id="hero-subtext">Join us in celebrating love, laughter & happily ever after</p>
+                            <div id="countdown-timer">
+                                <div id="timer-message"></div>
+                                <div id="timer-blocks">
+                                    <div class="timer-block">
+                                        <span id="days">00</span>
+                                        <span class="timer-label">Days</span>
+                                    </div>
+                                    <div class="timer-separator">:</div>
+                                    <div class="timer-block">
+                                        <span id="hours">00</span>
+                                        <span class="timer-label">Hours</span>
+                                    </div>
+                                    <div class="timer-separator">:</div>
+                                    <div class="timer-block">
+                                        <span id="minutes">00</span>
+                                        <span class="timer-label">Minutes</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </section>
 
                 <section id="functions-section">
@@ -569,6 +728,99 @@
     <!-- === JAVASCRIPT === -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Countdown Timer Logic ---
+            const weddingDate = new Date('November 12, 2025 00:00:00').getTime();
+            
+            const daysEl = document.getElementById('days');
+            const hoursEl = document.getElementById('hours');
+            const minutesEl = document.getElementById('minutes');
+            const subtextEl = document.getElementById('hero-subtext');
+            const timerBlocksEl = document.getElementById('timer-blocks');
+            const timerMessageEl = document.getElementById('timer-message');
+
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const difference = weddingDate - now;
+
+                const today = new Date();
+                const weddingDay = new Date(weddingDate);
+                
+                // Check if it's the wedding day
+                const isWeddingDay = today.getDate() === weddingDay.getDate() &&
+                                     today.getMonth() === weddingDay.getMonth() &&
+                                     today.getFullYear() === weddingDay.getFullYear();
+
+                if (isWeddingDay) {
+                    // Wedding is today
+                    if (timerBlocksEl) timerBlocksEl.style.display = 'none';
+                    if (timerMessageEl) {
+                        timerMessageEl.textContent = 'Wedding is Today!';
+                        timerMessageEl.style.display = 'block';
+                    }
+                    if (subtextEl) subtextEl.textContent = "Join us in celebrating love, laughter & happily ever after";
+                
+                } else if (difference > 0) {
+                    // Before the wedding
+                    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                    
+                    if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
+                    if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+                    if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+                    
+                } else {
+                    // After the wedding
+                    const differenceUp = now - weddingDate;
+                    const days = Math.floor(differenceUp / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((differenceUp % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((differenceUp % (1000 * 60 * 60)) / (1000 * 60));
+
+                    if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
+                    if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+                    if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+                    if (subtextEl) subtextEl.textContent = 'Happily married for';
+                }
+            }
+
+            // Initial call and set interval
+            if (daysEl && hoursEl && minutesEl && subtextEl) {
+                updateCountdown(); // Run once immediately
+                setInterval(updateCountdown, 1000); // Update every second
+            }
+
+            // --- Hero Slideshow Logic ---
+            const heroSlideshow = document.getElementById('hero-slideshow');
+            const heroImages = [
+                'https://kapilatgoogle.github.io/wedding-invite/hero1.png',
+                'https://kapilatgoogle.github.io/wedding-invite/hero2.png'
+            ];
+            let currentHeroIndex = 0;
+
+            if (heroSlideshow && heroImages.length > 0) {
+                // Create slide elements
+                heroImages.forEach((src, index) => {
+                    const slide = document.createElement('div');
+                    slide.className = 'hero-slide';
+                    slide.style.backgroundImage = `url('${src}')`;
+                    if (index === 0) {
+                        slide.classList.add('active'); // Show first image immediately
+                    }
+                    heroSlideshow.appendChild(slide);
+                });
+
+                const heroSlides = document.querySelectorAll('.hero-slide');
+                const totalHeroSlides = heroSlides.length;
+
+                if (totalHeroSlides > 1) {
+                    setInterval(() => {
+                        heroSlides[currentHeroIndex].classList.remove('active');
+                        currentHeroIndex = (currentHeroIndex + 1) % totalHeroSlides;
+                        heroSlides[currentHeroIndex].classList.add('active');
+                    }, 5000); // Change image every 5 seconds
+                }
+            }
             
             // --- Modal Logic ---
             const modal = document.getElementById('function-modal');
@@ -609,7 +861,7 @@
                     venue: 'Pool Side',
                     theme: 'Sunflower yellow & lavender theme',
                     mapLink: 'https://maps.google.com/?q=Pool+Side',
-                    imageUrl: 'https://kapilatgoogle.github.io/wedding-invite/haldi-ceremony.jpg' // Placeholder, update as needed
+                    imageUrl: 'https://kapilatgoogle.github.io/wedding-invite/haldi-ceremony.jpg' 
                 },
                 'wedding': { 
                     icon: 'local_florist',
@@ -618,7 +870,7 @@
                     venue: 'Palm Court',
                     theme: 'Ivory, Royal red/maroon, and gold theme',
                     mapLink: 'https://maps.google.com/?q=Palm+Court',
-                    imageUrl: 'https://kapilatgoogle.github.io/wedding-invite/wedding-ceremony.jpg' // Placeholder, update as needed
+                    imageUrl: 'https://kapilatgoogle.github.io/wedding-invite/wedding-ceremony.jpg' 
                 }
             };
             
@@ -716,18 +968,18 @@
                 { name: "Mehak", fact: "Mehak has a surprising skill: she can play the theme song from a famous 90s TV show entirely using only whistles." },
                 { name: "Gautam", fact: "Gautam is a massive sci-fi movie buff and can recite almost every line from 'Blade Runner'." },
                 { name: "Gautam", fact: "Gautam taught himself to play the acoustic guitar entirely through YouTube tutorials." },
-                { name: "Gautam", fact: "Gautam volunteered for a non-profit organization, teaching basic coding skills to high school students for a whole summer." },
+                { name: "Gautam", fact: "Gautam volunteered for a non-profit organization, teaching basic coding skills to high school students for a whole summer." }, 
                 { name: "Gautam", "fact": "Gautam is exceptionally skilled at puzzles and can solve a standard Rubik's cube in under a minute." },
                 { name: "Gautam", fact: "Gautam's favorite dish is plain Maggi noodles, which he considers his ultimate comfort food." }
             ];
 
             const slideshowTrack = document.getElementById('slideshow-track');
             const prevButton = document.getElementById('fun-fact-prev');
-            const nextButton = document.getElementById('fun-fact-next');
+            const nextButton =
+ document.getElementById('fun-fact-next');
 
             if (slideshowTrack && prevButton && nextButton) {
-                const mehakFacts = funFacts.filter(f => f.name === "Mehak");
-                // MODIFIED: Fixed typo "GGautam" -> "Gautam"
+                const mehakFacts = funFacts.filter(f => f.name === "Mehak"); 
                 const gautamFactsFixed = funFacts.filter(f => f.name === "Gautam"); 
 
                 const interleavedFacts = [];
@@ -755,7 +1007,6 @@
                 let slidesHTML = '';
                 interleavedFacts.forEach(fact => {
                     slidesHTML += createSlideHTML(fact);
-CSS
                 });
                 slideshowTrack.innerHTML = slidesHTML; 
 
