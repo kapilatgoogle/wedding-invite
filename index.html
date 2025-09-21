@@ -61,11 +61,9 @@
             scroll-behavior: smooth;
             display: flex;
             flex-direction: column;
-            /* === MODIFIED: Hide scrollbar for Firefox === */
             scrollbar-width: none;
         }
         
-        /* === MODIFIED: Hide scrollbar for WebKit (Chrome, Safari) === */
         #app-inner-wrapper::-webkit-scrollbar {
             display: none;
         }
@@ -343,14 +341,24 @@
             position: relative;
             width: 100%;
             max-width: 24rem; 
-            background-color: #ffffff;
             border-radius: 0.5rem;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             overflow: hidden;
             transform: scale(1);
             opacity: 1;
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease-in-out;
+            
+            /* MODIFIED: Added white fallback color */
+            background-color: #ffffff; 
+            
+            /* background-image is now set by JS */
+            background-size: cover;
+            background-position: center;
+            aspect-ratio: 3 / 5;
+            display: flex;
+            flex-direction: column;
         }
+
 
         #function-modal.hidden #modal-content-area {
             transform: scale(0.9);
@@ -363,7 +371,7 @@
             top: 0.5rem;
             right: 0.5rem;
             z-index: 10;
-            color: var(--gray-500);
+            color: var(--gray-500); 
             transition: color 0.2s ease-in-out;
             background: none;
             border: none;
@@ -376,21 +384,24 @@
         }
 
         #modal-details-content {
-            padding: 1.5rem;
-            padding-top: 2.5rem;
+            height: 55%;
+            flex-shrink: 0; 
+            padding: 1.5rem 1.5rem 0 1.5rem; 
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
+            position: relative;
+            justify-content: center; 
         }
         
         #modal-icon {
             color: var(--brand-pink);
-            font-size: 3rem; 
+            font-size: 2.5rem; 
             margin-bottom: 0.5rem;
         }
         #modal-title {
-            font-size: 1.875rem; 
+            font-size: 1.75rem; 
             font-weight: 700;
             color: var(--brand-pink);
             margin-bottom: 0.5rem;
@@ -400,23 +411,24 @@
             font-size: 1.125rem; 
             font-weight: 600;
             color: var(--gray-800);
+            margin-bottom: 0.25rem;
         }
         #modal-venue {
-            font-size: 1rem; 
+            font-size: 0.875rem; 
             color: var(--gray-600);
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
         #modal-description {
             color: var(--gray-700);
             font-size: 0.875rem; 
             font-style: italic;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
         #modal-map-link {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 0.5rem 1rem;
+            padding: 0.6rem 1.25rem;
             background-color: var(--brand-pink);
             color: #ffffff;
             font-size: 0.875rem; 
@@ -433,19 +445,6 @@
         #modal-map-link .material-icons-outlined {
             margin-right: 0.5rem;
             font-size: 1.25rem;
-        }
-
-        #modal-image-placeholder {
-            min-height: 200px;
-            background-color: var(--gray-200);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        #modal-image-placeholder p {
-            color: var(--gray-500);
-            font-size: 0.875rem; 
-            font-style: italic;
         }
 
     </style>
@@ -549,7 +548,9 @@
                 </button>
 
                 <div id="modal-details-content">
+                
                     <span id="modal-icon" class="material-icons-outlined"></span>
+                    
                     <h2 id="modal-title"></h2>
                     <p id="modal-datetime"></p>
                     <p id="modal-venue"></p>
@@ -558,10 +559,6 @@
                         <span class="material-icons-outlined">map</span>
                         View Map
                     </a>
-                </div>
-
-                <div id="modal-image-placeholder">
-                    <p>(Couple's Image Will Go Here)</p>
                 </div>
 
             </div>
@@ -573,11 +570,11 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            // --- Modal Logic (Unchanged) ---
+            // --- Modal Logic ---
             const modal = document.getElementById('function-modal');
             const closeModalBtn = document.getElementById('modal-close-btn');
             
-            const modalIcon = document.getElementById('modal-icon');
+            const modalIcon = document.getElementById('modal-icon'); 
             const modalTitle = document.getElementById('modal-title');
             const modalDateTime = document.getElementById('modal-datetime');
             const modalVenue = document.getElementById('modal-venue');
@@ -593,7 +590,8 @@
                     dateTime: '11th Nov, Noon',
                     venue: 'Pearl Hall',
                     theme: 'Rani Pink & Orange theme',
-                    mapLink: 'https://maps.google.com/?q=Pearl+Hall'
+                    mapLink: 'https://maps.google.com/?q=Pearl+Hall',
+                    imageUrl: 'https://kapilatgoogle.github.io/wedding-invite/mehendi-ceremony.jpg'
                 },
                 'ring': { 
                     icon: 'diamond',
@@ -601,7 +599,8 @@
                     dateTime: '11th Nov, 7 PM onwards',
                     venue: 'Amber Hall',
                     theme: 'Starry night: Navy blue, gold, silver & disco balls',
-                    mapLink: 'https://maps.google.com/?q=Amber+Hall'
+                    mapLink: 'https://maps.google.com/?q=Amber+Hall',
+                    imageUrl: 'https://kapilatgoogle.github.io/wedding-invite/ring-ceremony.jpg'
                 },
                 'haldi': { 
                     icon: 'filter_vintage',
@@ -609,7 +608,8 @@
                     dateTime: '12th Nov, 11 AM',
                     venue: 'Pool Side',
                     theme: 'Sunflower yellow & lavender theme',
-                    mapLink: 'https://maps.google.com/?q=Pool+Side'
+                    mapLink: 'https://maps.google.com/?q=Pool+Side',
+                    imageUrl: 'https://kapilatgoogle.github.io/wedding-invite/haldi-ceremony.jpg' // Placeholder, update as needed
                 },
                 'wedding': { 
                     icon: 'local_florist',
@@ -617,86 +617,97 @@
                     dateTime: '12th Nov, 7 PM onwards',
                     venue: 'Palm Court',
                     theme: 'Ivory, Royal red/maroon, and gold theme',
-                    mapLink: 'https://maps.google.com/?q=Palm+Court' 
+                    mapLink: 'https://maps.google.com/?q=Palm+Court',
+                    imageUrl: 'https://kapilatgoogle.github.io/wedding-invite/wedding-ceremony.jpg' // Placeholder, update as needed
                 }
             };
+            
+            const modalContentArea = document.getElementById('modal-content-area');
 
             function openModal(functionKey) {
                 const details = functionDetails[functionKey];
                 if (details) {
-                    modalIcon.textContent = details.icon;
-                    modalTitle.textContent = details.title;
-                    modalDateTime.textContent = details.dateTime;
-                    modalVenue.textContent = details.venue;
-                    modalDescription.textContent = `"${details.theme}"`;
-                    modalMapLink.href = details.mapLink;
-                    modal.classList.remove('hidden');
+                    if (modalIcon) modalIcon.textContent = details.icon; 
+                    if (modalTitle) modalTitle.textContent = details.title;
+                    if (modalDateTime) modalDateTime.textContent = details.dateTime;
+                    if (modalVenue) modalVenue.textContent = details.venue;
+                    if (modalDescription) modalDescription.textContent = `"${details.theme}"`;
+                    if (modalMapLink) modalMapLink.href = details.mapLink;
+                    
+                    if (modalContentArea) modalContentArea.style.backgroundImage = `url('${details.imageUrl}')`;
+
+                    if (modal) modal.classList.remove('hidden');
                 }
             }
 
             function closeModal() {
-                modal.classList.add('hidden');
+                if (modal) modal.classList.add('hidden');
             }
 
-            functionCards.forEach(card => {
-                card.addEventListener('click', () => {
-                    const functionKey = card.dataset.function;
-                    openModal(functionKey);
+            if (functionCards) {
+                functionCards.forEach(card => {
+                    card.addEventListener('click', () => {
+                        const functionKey = card.dataset.function;
+                        openModal(functionKey);
+                    });
                 });
-            });
+            }
 
-            closeModalBtn.addEventListener('click', closeModal);
+            if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
 
-            modal.addEventListener('click', (event) => {
-                if (event.target === modal) {
-                    closeModal();
-                }
-            });
+            if (modal) {
+                modal.addEventListener('click', (event) => {
+                    if (event.target === modal) {
+                        closeModal();
+                    }
+                });
+            }
 
             // --- Footer Active State Logic ---
             const navLinks = document.querySelectorAll('footer nav a');
             const scrollContainer = document.getElementById('app-inner-wrapper');
             const header = document.querySelector('header');
-
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault(); 
-                    const targetId = link.getAttribute('href');
-                    const targetElement = document.querySelector(targetId);
-
-                    if (targetElement) {
-                        scrollContainer.scrollTo({
-                            top: targetElement.offsetTop - header.offsetHeight, 
-                            behavior: 'smooth'
-                        });
-                    }
-                    navLinks.forEach(nav => nav.classList.remove('active'));
-                    link.classList.add('active');
-                });
-            });
-            
             const sections = document.querySelectorAll('main section');
-            
-            scrollContainer.addEventListener('scroll', () => {
-                let current = '';
-                const headerOffset = header.offsetHeight + 20; 
 
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop - headerOffset;
-                    if (scrollContainer.scrollTop >= sectionTop) {
-                        current = section.getAttribute('id');
-                    }
-                });
-
+            if (navLinks && scrollContainer && header && sections) {
                 navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${current}`) {
-                        link.classList.add('active');
-                    }
-                });
-            });
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault(); 
+                        const targetId = link.getAttribute('href');
+                        const targetElement = document.querySelector(targetId);
 
-            // --- Fun Facts Slideshow Logic (Unchanged) ---
+                        if (targetElement) {
+                            scrollContainer.scrollTo({
+                                top: targetElement.offsetTop - header.offsetHeight, 
+                                behavior: 'smooth'
+                            });
+                        }
+                        navLinks.forEach(nav => nav.classList.remove('active'));
+                        link.classList.add('active');
+                    });
+                });
+                
+                scrollContainer.addEventListener('scroll', () => {
+                    let current = '';
+                    const headerOffset = header.offsetHeight + 20; 
+
+                    sections.forEach(section => {
+                        const sectionTop = section.offsetTop - headerOffset;
+                        if (scrollContainer.scrollTop >= sectionTop) {
+                            current = section.getAttribute('id');
+                        }
+                    });
+
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${current}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                });
+            }
+
+            // --- Fun Facts Slideshow Logic ---
             const funFacts = [
                 { name: "Mehak", fact: "Mehak is an avid rock climber and scaled her first V5 route just last year." },
                 { name: "Mehak", fact: "Mehak is a secret language enthusiast and can speak three languages fluently: Hindi, English, and French." },
@@ -706,7 +717,7 @@
                 { name: "Gautam", fact: "Gautam is a massive sci-fi movie buff and can recite almost every line from 'Blade Runner'." },
                 { name: "Gautam", fact: "Gautam taught himself to play the acoustic guitar entirely through YouTube tutorials." },
                 { name: "Gautam", fact: "Gautam volunteered for a non-profit organization, teaching basic coding skills to high school students for a whole summer." },
-                { name: "Gautam", fact: "Gautam is exceptionally skilled at puzzles and can solve a standard Rubik's cube in under a minute." },
+                { name: "Gautam", "fact": "Gautam is exceptionally skilled at puzzles and can solve a standard Rubik's cube in under a minute." },
                 { name: "Gautam", fact: "Gautam's favorite dish is plain Maggi noodles, which he considers his ultimate comfort food." }
             ];
 
@@ -716,7 +727,8 @@
 
             if (slideshowTrack && prevButton && nextButton) {
                 const mehakFacts = funFacts.filter(f => f.name === "Mehak");
-                const gautamFactsFixed = funFacts.filter(f => f.name === "Gautam");
+                // MODIFIED: Fixed typo "GGautam" -> "Gautam"
+                const gautamFactsFixed = funFacts.filter(f => f.name === "Gautam"); 
 
                 const interleavedFacts = [];
                 const maxLength = Math.max(mehakFacts.length, gautamFactsFixed.length);
@@ -743,10 +755,12 @@
                 let slidesHTML = '';
                 interleavedFacts.forEach(fact => {
                     slidesHTML += createSlideHTML(fact);
+CSS
                 });
                 slideshowTrack.innerHTML = slidesHTML; 
 
                 function goToSlide(index) {
+                    if (totalSlides === 0) return; // Prevent errors if no slides
                     if (index < 0) index = totalSlides - 1; 
                     else if (index >= totalSlides) index = 0; 
                     slideshowTrack.style.transform = `translateX(-${index * 100}%)`;
@@ -763,30 +777,33 @@
             }
             
             // --- Intersection Observer for Scroll Animations ---
-            const hiddenSections = document.querySelectorAll('.section-hidden');
-            
-            sections.forEach(section => {
-                section.classList.add('section-hidden');
-            });
+            const scrollContainerForObserver = document.getElementById('app-inner-wrapper');
+            const sectionsForObserver = document.querySelectorAll('main section');
 
-            const observerOptions = {
-                root: scrollContainer, 
-                rootMargin: '0px',
-                threshold: 0.1 
-            };
-
-            const sectionObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('section-visible');
-                        observer.unobserve(entry.target); 
-                    }
+            if (scrollContainerForObserver && sectionsForObserver) {
+                sectionsForObserver.forEach(section => {
+                    section.classList.add('section-hidden');
                 });
-            }, observerOptions);
 
-            sections.forEach(section => {
-                sectionObserver.observe(section);
-            });
+                const observerOptions = {
+                    root: scrollContainerForObserver, 
+                    rootMargin: '0px',
+                    threshold: 0.1 
+                };
+
+                const sectionObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('section-visible');
+                            observer.unobserve(entry.target); 
+                        }
+                    });
+                }, observerOptions);
+
+                sectionsForObserver.forEach(section => {
+                    sectionObserver.observe(section);
+                });
+            }
 
         });
     </script>
